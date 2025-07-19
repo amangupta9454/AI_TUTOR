@@ -1,0 +1,32 @@
+@import "tailwindcss";
+/* navbar styling */
+@keyframes slide-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-slide-down {
+  animation: slide-down 0.3s ease-out forwards;
+}
+
+@keyframes text-glow {
+  0%, 100% {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.2), 0 0 10px rgba(225, 2, 265, 0.7);
+  }
+  50% {
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.6), 0 0 20px rgba(0, 255, 255, 0.5);
+  }
+}
+.animate-text-glow {
+  animation: text-glow 5s ease-in-out infinite;
+}
+
+/* contact.jsx */
+
+
+

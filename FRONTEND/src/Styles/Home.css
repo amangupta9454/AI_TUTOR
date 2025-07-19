@@ -1,0 +1,66 @@
+.gradient-title {
+  background: linear-gradient(
+    45deg,
+    #dbc2cf,
+    /* #05010a, */
+    #90e8f7,
+    #767375
+  );
+  background-size: 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
+}
+
+.animate-gradient {
+  animation: gradientAnimation 4s ease infinite;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.hero-image-wrapper {
+  position: relative;
+}
+
+.hero-image {
+  transition: transform 0.3s ease;
+}
+
+.hero-image.scrolled {
+  transform: translateY(10px) scale(0.98);
+}
+
+.glow-effect {
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+  transition: box-shadow 0.3s ease;
+}
+
+.glow-effect:hover {
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 1s ease-out forwards;
+}
