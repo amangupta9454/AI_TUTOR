@@ -40,7 +40,6 @@ const Navbar = () => {
           { name: 'Career Path', to: '/career' },
            {name: "Resume builder", to: "/resume"},
           { name: 'Login', to: '/login' },
-          { name: 'Register', to: '/register' },
           { name: 'Contact', to: '/contact' },
 
          
