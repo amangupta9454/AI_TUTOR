@@ -56,7 +56,7 @@ const Contact = () => {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         {/* Header Section */}
-        <div className="text-center mb-16 space-y-4">
+        <div className="text-center mb-16 space-y-4 pt-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-gray-500 to-white rounded-full mb-6 animate-bounce">
             <Mail className="w-8 h-8 text-black" />
           </div>

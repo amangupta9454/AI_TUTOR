@@ -121,7 +121,7 @@ const Register = () => {
         </div>
       </div>
 
-      <div className={`relative z-10 max-w-2xl w-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl hover:shadow-gray-500/25 transition-all duration-500 transform ${isMounted ? 'animate-slideIn' : 'opacity-0 translate-x-10'}`}>
+      <div className={`pt-24 relative z-10 max-w-2xl w-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl hover:shadow-gray-500/25 transition-all duration-500 transform ${isMounted ? 'animate-slideIn' : 'opacity-0 translate-x-10'}`}>
         <h2 className="text-4xl font-bold text-white mb-6 text-center bg-gradient-to-r from-white via-gray-300 to-gray-500 bg-clip-text  animate-fadeInUp">
           Create Your Account
         </h2>
