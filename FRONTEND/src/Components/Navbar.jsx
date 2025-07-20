@@ -55,9 +55,17 @@ const Navbar = () => {
       <div className="backdrop-blur-xl bg-[#020617]/90 shadow-[0_8px_30px_rgba(0,0,0,0.6)] border-b border-[#1e293b]">
         <div className="max-w-7xl mx-auto px-6 sm:px-10 py-4 flex items-center justify-between">
           {/* Logo */}
-          <div className="text-3xl font-bold italic tracking-wide bg-gradient-to-r from-purple-500 via-pink-500 to-blue-400 text-transparent bg-clip-text">
-            Saarthi
+          {/* <div className="text-3xl font-semibold italic tracking-wide bg-gradient-to-r from-purple-500 via-pink-500 to-blue-400 text-transparent bg-clip-text">
+            Ai_Career
+          </div> */}
+          <div className="text-3xl font-bold tracking-wide bg-gray-300 text-transparent bg-clip-text"
+            style={{ fontFamily: "'Rowdies', sans-serif",
+              fontWeight: '500',
+            }}>
+
+            AI_Career
           </div>
+          
 
           {/* Desktop Links */}
           <div className="hidden md:flex space-x-10">

@@ -134,8 +134,8 @@ const EmailGenerator = () => {
     }));
   };
 
-  const toggleHighContrast = () => setHighContrast(!highContrast);
-  const toggleAnimations = () => setDisableAnimations(!disableAnimations);
+  // const toggleHighContrast = () => setHighContrast(!highContrast);
+  // const toggleAnimations = () => setDisableAnimations(!disableAnimations);
 
   return (
     <section className={`relative min-h-screen md:min-h-[60vh] ${highContrast ? 'bg-gray-900 text-white' : 'bg-gradient-to-br from-gray-900 via-gray-800 to-black'} overflow-hidden flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-24`}>
@@ -172,11 +172,11 @@ const EmailGenerator = () => {
         )}
       </div>
 
-      <div className={`relative z-10 w-full max-w-5xl bg-white/10 backdrop-blur-2xl border border-white/20 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-xl transition-all duration-500 transform ${isMounted ? 'animate-slideIn' : 'opacity-0 translate-x-10'}`}>
+      <div className={`relative mt-10 mb-10 z-10 w-full max-w-5xl bg-white/10 backdrop-blur-2xl border border-white/20 rounded-2xl p-4 sm:p-6 lg:p-8 shadow-xl transition-all duration-500 transform ${isMounted ? 'animate-slideIn' : 'opacity-0 translate-x-10'}`}>
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white mb-6 text-center bg-gradient-to-r from-white via-gray-300 to-gray-500 bg-clip-text animate-fadeInUp">
           Craft Your Professional Email
         </h2>
-        <div className="flex justify-end space-x-4 mb-4">
+        {/* <div className="flex justify-end space-x-4 mb-4">
           <button
             onClick={toggleHighContrast}
             className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
@@ -191,7 +191,7 @@ const EmailGenerator = () => {
           >
             {disableAnimations ? 'Enable Animations' : 'Disable Animations'}
           </button>
-        </div>
+        </div> */}
 
         {error && <p className="text-red-400 mb-4 text-center font-medium animate-fadeInUp">{error}</p>}
         {success && <p className="text-green-400 mb-4 text-center font-medium animate-fadeInUp">{success}</p>}
@@ -405,7 +405,7 @@ const EmailGenerator = () => {
         {Array.isArray(emailHistory) && emailHistory.length > 0 && (
           <div className="mt-6">
             <h3 className="text-xl sm:text-2xl font-semibold text-white mb-4 animate-fadeInUp">Email History</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 flex-wrap">
+            <div className="grid grid-rows-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 flex-wrap justify-center">
               {emailHistory.map((email, index) => (
                 <div
                   key={email._id}
