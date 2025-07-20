@@ -20,7 +20,7 @@ const CareerPath = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
-  const genAI = new GoogleGenerativeAI(import.meta.env.VITE_APP_GEMINI_API_KEY)
+  const genAI = new GoogleGenerativeAI('AIzaSyDgYVIkudqdxLcRBQfOSAluvuZAVqmrK3U')
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
