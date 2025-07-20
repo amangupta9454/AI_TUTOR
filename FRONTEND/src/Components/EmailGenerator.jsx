@@ -134,7 +134,8 @@ const EmailGenerator = () => {
     }));
   };
 
-  
+  // const toggleHighContrast = () => setHighContrast(!highContrast);
+  // const toggleAnimations = () => setDisableAnimations(!disableAnimations);
 
   return (
     <section className={`relative min-h-screen md:min-h-[60vh] ${highContrast ? 'bg-gray-900 text-white' : 'bg-gradient-to-br from-gray-900 via-gray-800 to-black'} overflow-hidden flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-24`}>
@@ -175,7 +176,22 @@ const EmailGenerator = () => {
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white mb-6 text-center bg-gradient-to-r from-white via-gray-300 to-gray-500 bg-clip-text animate-fadeInUp">
           Craft Your Professional Email
         </h2>
-       
+        {/* <div className="flex justify-end space-x-4 mb-4">
+          <button
+            onClick={toggleHighContrast}
+            className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
+            aria-label={highContrast ? 'Disable high contrast mode' : 'Enable high contrast mode'}
+          >
+            {highContrast ? 'Normal Mode' : 'High Contrast'}
+          </button>
+          <button
+            onClick={toggleAnimations}
+            className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
+            aria-label={disableAnimations ? 'Enable animations' : 'Disable animations'}
+          >
+            {disableAnimations ? 'Enable Animations' : 'Disable Animations'}
+          </button>
+        </div> */}
 
         {error && <p className="text-red-400 mb-4 text-center font-medium animate-fadeInUp">{error}</p>}
         {success && <p className="text-green-400 mb-4 text-center font-medium animate-fadeInUp">{success}</p>}
