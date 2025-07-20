@@ -9,6 +9,7 @@ import InterviewPrep from './Components/InterviewPrep'
 import CareerPath from './Components/Carrerpath'
 import EmailGenerator from './Components/EmailGenerator'
 import ResumeEmbed from './Components/ResumeEmbed'
+import Footer from './Components/Footer'
 const App = () => {
   return (
     <BrowserRouter>
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="/email" element={<EmailGenerator />} />
           <Route path="/resume" element={<ResumeEmbed />} />
         </Routes>
+        <Footer />
       
     </BrowserRouter>
   )
