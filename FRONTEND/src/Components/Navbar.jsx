@@ -33,9 +33,12 @@ const Navbar = () => {
           { name: 'Contact', to: '/contact' },
            { name: 'Interview Prep', to: '/interview-prep' },
           { name: 'Email Generator', to: '/email' },
+          { name: 'Career Path', to: '/career' },
+          {name: "Resume builder", to: "/resume"},
         ]
       : [
           { name: 'Career Path', to: '/career' },
+           {name: "Resume builder", to: "/resume"},
           { name: 'Login', to: '/login' },
           { name: 'Register', to: '/register' },
           { name: 'Contact', to: '/contact' },
@@ -54,7 +57,7 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-6 sm:px-10 py-4 flex items-center justify-between">
           {/* Logo */}
           <div className="text-3xl font-bold italic tracking-wide bg-gradient-to-r from-purple-500 via-pink-500 to-blue-400 text-transparent bg-clip-text animate-text-glow">
-            AI__COACH
+            Saarthi
           </div>
 
           {/* Desktop Links */}
