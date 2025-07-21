@@ -799,7 +799,7 @@ const Home = () => {
       `}</style>
 
       {/* Hero Section */}
-      <section className="min-h-screen w-full  sm:pt-16 pb-8 sm:pb-12 cosmic-bg relative overflow-x-hidden pt-28">
+      <section className="min-h-screen md:min-h-[50vh] w-full  sm:pt-16 pb-8 sm:pb-12 cosmic-bg relative overflow-x-hidden pt-28">
         <div className="absolute inset-0 starfield opacity-40"></div>
         
         <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
