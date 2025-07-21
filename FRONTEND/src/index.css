@@ -40,3 +40,24 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
+
+/* Assuming gradient-title is defined in your CSS */
+.gradient-title {
+  background: linear-gradient(90deg, #ffffff, #a1c4fd); /* Light gradient for dark backgrounds */
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Subtle shadow for readability */
+}
+
+/* Optional: Add a fallback color for browsers that don't support background-clip */
+.gradient-title {
+  color: #ffffff; /* Fallback for better visibility */
+}
+
+/* Ensure the h1 has enough spacing */
+h1 {
+  padding: 0.5rem 1rem; /* Adjust padding for better spacing */
+  line-height: 1.2; /* Tight but readable line height */
+}
+

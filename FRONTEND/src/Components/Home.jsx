@@ -198,24 +198,23 @@ const Home = () => {
   return (
     <>
       <style>{`
-        /* Enhanced Gradient Animations */
         .gradient-title {
-          background: linear-gradient(135deg, #e5e7eb, #6b7280, #1e40af, #3b82f6);
-          background-size: 300% 300%;
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-          text-fill-color: transparent;
-          animation: metallicShift 8s ease-in-out infinite;
-          filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
-        }
+  background: linear-gradient(135deg, #ffffff, #d1d5db, #60a5fa, #93c5fd);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-fill-color: transparent;
+  animation: metallicShift 8s ease-in-out infinite;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+  color: #ffffff; /* Fallback for browsers that don't support background-clip */
+}
 
-        @keyframes metallicShift {
-          0%, 100% { background-position: 0% 50%; }
-          25% { background-position: 100% 50%; }
-          50% { background-position: 100% 100%; }
-          75% { background-position: 0% 100%; }
-        }
+@keyframes metallicShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 
         /* Enhanced Hero Image with Advanced Parallax */
         .hero-image {
@@ -799,7 +798,7 @@ const Home = () => {
       `}</style>
 
       {/* Hero Section */}
-      <section className="min-h-screen md:min-h-[50vh] w-full  sm:pt-16 pb-8 sm:pb-12 cosmic-bg relative overflow-x-hidden pt-28">
+      <section className=" min-h-[40vh] w-full  sm:pt-16 pb-8 sm:pb-12 cosmic-bg relative overflow-x-hidden pt-28">
         <div className="absolute inset-0 starfield opacity-40"></div>
         
         <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
@@ -813,14 +812,11 @@ const Home = () => {
 
             {/* Main Title */}
             <div className="space-y-3 sm:space-y-4">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black gradient-title leading-tight px-2 sm:px-0">
-                Your AI Career Coach
-                <br />
-                
-                  for Professional Success
-                  
-                
-              </h1>
+             <h1 className="text-5xl font-extrabold gradient-title leading-tight px-2 sm:px-0 text-center">
+  Your AI Career Coach
+  <br />
+  for Professional Success
+</h1>
               
               <p className="mx-auto max-w-full sm:max-w-2xl text-sm sm:text-base md:text-lg text-gray-300 leading-relaxed px-4 sm:px-0">
                 Transform your career with AI-powered insights, personalized guidance, and cutting-edge tools designed for the modern professional.
