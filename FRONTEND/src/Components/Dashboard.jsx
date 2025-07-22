@@ -137,7 +137,7 @@ const Dashboard = () => {
                   console.error('Image failed to load:', user.image);
                   e.target.src = 'https://via.placeholder.com/96';
                 }}
-                onLoad={() => console.log('Image loaded successfully:', user.image)}
+                // onLoad={() => console.log('Image loaded successfully:', user.image)}
               />
             ) : (
               <div className="w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-white/5 flex items-center justify-center border-4 border-white/20 shadow-xl">

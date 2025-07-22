@@ -46,7 +46,7 @@ const cloudinaryUploadMiddleware = async (req, res, next) => {
       ).end(req.file.buffer);
     });
     req.imageUrl = result.secure_url;
-    console.log('Cloudinary upload successful:', req.imageUrl); // Debug log
+    // console.log('Cloudinary upload successful:', req.imageUrl); // Debug log
     next();
   } catch (error) {
     console.error('Cloudinary upload error:', error);
@@ -56,13 +56,13 @@ const cloudinaryUploadMiddleware = async (req, res, next) => {
 
 const protect = async (req, res, next) => {
   let token;
-  console.log('Authorization header:', req.headers.authorization);
+  // console.log('Authorization header:', req.headers.authorization);
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     try {
       token = req.headers.authorization.split(' ')[1];
-      console.log('Token extracted:', token);
+      // console.log('Token extracted:', token);
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      console.log('Decoded JWT:', decoded);
+      // console.log('Decoded JWT:', decoded);
       req.user = decoded;
       next();
     } catch (error) {

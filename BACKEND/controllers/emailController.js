@@ -6,7 +6,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
 exports.generateEmail = async (req, res) => {
-  console.log('Received request to /api/emails/generate:', { body: req.body, user: req.user });
+  // console.log('Received request to /api/emails/generate:', { body: req.body, user: req.user });
 
   try {
     if (!process.env.GEMINI_API_KEY) {
@@ -26,7 +26,7 @@ exports.generateEmail = async (req, res) => {
     const userId = req.user.id;
 
     if (!name || !emailId || !jobRole || !companyName || !category || !tone || !length) {
-      console.log('Missing required fields:', req.body);
+      // console.log('Missing required fields:', req.body);
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
@@ -35,29 +35,29 @@ exports.generateEmail = async (req, res) => {
       category, experience, jobDescription, tone, length, skills
     });
 
-    console.log('Generated Prompt:', prompt);
+    // console.log('Generated Prompt:', prompt);
 
     let result;
     try {
       result = await model.generateContent(prompt);
-      console.log('Gemini API call successful');
+      // console.log('Gemini API call successful');
     } catch (error) {
       console.error('Gemini API call failed:', error.message, error.stack);
       return res.status(500).json({ message: 'Failed to generate content from AI' });
     }
 
     let responseText = result.response.text().trim();
-    console.log('Raw Gemini Response:', responseText);
+    // console.log('Raw Gemini Response:', responseText);
 
     responseText = responseText.replace(/^```json\n|\n```$/g, '');
-    console.log('Cleaned Gemini Response:', responseText);
+    // console.log('Cleaned Gemini Response:', responseText);
 
     let emailContent, subject;
     try {
       let parsed;
       try {
         parsed = JSON.parse(responseText);
-        console.log('Parsed JSON:', parsed);
+        // console.log('Parsed JSON:', parsed);
         subject = parsed.subject && typeof parsed.subject === 'string'
           ? parsed.subject
           : `Application for ${jobRole} at ${companyName}`;
@@ -70,7 +70,7 @@ exports.generateEmail = async (req, res) => {
         if (jsonMatch) {
           try {
             parsed = JSON.parse(jsonMatch[0]);
-            console.log('Regex Parsed JSON:', parsed);
+            // console.log('Regex Parsed JSON:', parsed);
             subject = parsed.subject && typeof parsed.subject === 'string'
               ? parsed.subject
               : `Application for ${jobRole} at ${companyName}`;
@@ -119,7 +119,7 @@ exports.generateEmail = async (req, res) => {
       emailContent = `**Dear Hiring Manager,**\n\nI am writing to express my interest in the ${jobRole} position at ${companyName}. With ${experience} years of experience, I am confident in my ability to contribute to your team.\n\n**Skills:** ${skills ? skills.split(',').map(s => s.trim()).join(', ') : 'Not provided'}\n\n**Links:**\n${githubUrl ? `- GitHub: ${githubUrl}\n` : ''}${linkedinUrl ? `- LinkedIn: ${linkedinUrl}\n` : ''}\n**Contact:**\n- Email: ${emailId}\n${mobileNumber ? `- Mobile: ${mobileNumber}\n` : ''}\nThank you for considering my application.\n\n**Best regards,**\n${name}`;
     }
 
-    console.log('Final Email Content:', emailContent);
+    // console.log('Final Email Content:', emailContent);
 
     let savedEmail;
     try {
@@ -135,7 +135,7 @@ exports.generateEmail = async (req, res) => {
         generatedEmail: emailContent,
       });
       if (existingEmail) {
-        console.log('Duplicate email found, returning existing:', existingEmail._id);
+        // console.log('Duplicate email found, returning existing:', existingEmail._id);
         return res.status(200).json({ email: emailContent, emailId: existingEmail._id, subject });
       }
 
@@ -158,7 +158,7 @@ exports.generateEmail = async (req, res) => {
         subject,
       });
       await savedEmail.save();
-      console.log('Email saved to database:', savedEmail._id);
+      // console.log('Email saved to database:', savedEmail._id);
     } catch (dbError) {
       console.error('Database save failed:', dbError.message, dbError.stack);
       return res.status(500).json({ message: 'Failed to save email to database' });
@@ -172,10 +172,10 @@ exports.generateEmail = async (req, res) => {
 };
 
 exports.getUserEmails = async (req, res) => {
-  console.log('Received request to /api/emails/my-emails:', { user: req.user });
+  // console.log('Received request to /api/emails/my-emails:', { user: req.user });
   try {
     const emails = await Email.find({ userId: req.user.id }).sort({ createdAt: -1 });
-    console.log('Fetched emails:', emails.length);
+    // console.log('Fetched emails:', emails.length);
     res.status(200).json({ emails: emails || [] });
   } catch (error) {
     console.error('Error fetching emails:', error.message, error.stack);
