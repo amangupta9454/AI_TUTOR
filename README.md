@@ -240,7 +240,6 @@ The backend typically runs on http://localhost:5000 (configurable in server.js).
     <li>📬 AI-Powered Email Generator: Craft job outreach and follow-up emails using Gemini API</li>
      <li>📊 Market Insights: Gain valuable insights into job market trends and opportunities</li>
       <li>🤝 Interview Prep: Prepare effectively for interviews with AI-powered guidance</li>
-       <li>💳 Razorpay payment system</li>
         </ul> 
         <hr> 
         <h2 id="enhancements">🚀 Future Enhancements</h2>
@@ -261,7 +260,8 @@ The backend typically runs on http://localhost:5000 (configurable in server.js).
                   </ul> 
                   <hr>
                    <h2 id="creator">👨‍💻 Created By</h2> 
-                   <p><strong>Aman Gupta</strong><br>B.Tech 3rd year Student | HIET Ghaziabad<br>Passionate about tech and sustainable Applications 🌱</p>
+                   <p><strong>Aman Gupta</strong><br>B.Tech 3rd year Student | HIET Ghaziabad<br>Passionate about building AI-driven solutions to empower career growth 🚀</p>
+                   <p><strong>Himanshu Gupta</strong><br>B.Tech 3rd year Student | HIET Ghaziabad<br>Passionate about building AI-driven solutions to empower career growth 🚀</p>
                     <p align="center">⭐ If you found this project helpful, give it a star!</p>
 
 <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
