@@ -262,7 +262,6 @@ The backend typically runs on http://localhost:5000 (configurable in server.js).
                    <h2 id="creator">👨‍💻 Created By</h2> 
                    <p><strong>Aman Gupta</strong><br>B.Tech 3rd year Student | HIET Ghaziabad<br>Passionate about tech and sustainable Applications 🌱</p>
                     <p align="center">⭐ If you found this project helpful, give it a star!</p>
-## 📸 Screenshots
 
 <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
     <h2 id="screenshots" style="color: #4CAF50; font-size: 28px; font-weight: bold; margin-bottom: 20px;">📸 Screenshots</h2>
