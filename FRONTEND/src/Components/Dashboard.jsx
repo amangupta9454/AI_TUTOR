@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
@@ -55,7 +54,7 @@ const Dashboard = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
-    window.dispatchEvent(new Event('storage')); // Trigger storage event
+    window.dispatchEvent(new Event('storage'));
   };
 
   const toggleQuestions = (sessionId) => {
@@ -70,7 +69,9 @@ const Dashboard = () => {
   const sidebarLinks = [
     { name: 'Interview Prep', to: '/interview-prep' },
     { name: 'Email Generator', to: '/email' },
+    { name: 'Career Path', to: '/career' },
     { name: 'Resume Builder', to: '/resume' },
+    { name: 'Career Analyzer', to: '/carreranalyzer' },
   ];
 
   if (loading) {
@@ -102,7 +103,7 @@ const Dashboard = () => {
   }
 
   return (
-    <section className="relative min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black overflow-hidden flex items-center justify-center py-12 sm:py-16 md:py-20">
+    <section className="relative min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black overflow-hidden py-12 sm:py-16 md:py-20">
       <div className="absolute inset-0">
         <div className="absolute top-20 left-10 w-72 h-72 bg-gray-600/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-gray-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
@@ -136,9 +137,9 @@ const Dashboard = () => {
       <div className="relative z-10 max-w-7xl w-full mx-4 sm:mx-6 flex flex-col md:flex-row gap-6">
         {/* Sidebar */}
         <div
-          className={`fixed md:static top-0 left-0 h-full md:h-auto w-64 bg-[#0f172a]/90 backdrop-blur-xl border-r border-white/10 p-6 transition-transform duration-300 ${
-            sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
-          } md:w-64 md:flex-shrink-0`}
+          className={`fixed top-0 left-0 h-full w-64 bg-[#0f172a]/90 backdrop-blur-xl border-r border-white/10 p-6 transition-transform duration-300 z-50 ${
+            sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          } md:static md:w-64 md:flex-shrink-0 md:translate-x-0`}
         >
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-xl font-bold text-white">Menu</h3>
@@ -182,7 +183,7 @@ const Dashboard = () => {
             Welcome, {user?.name}!
           </h2>
           <div className="space-y-12">
-            <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-10 animate-fadeInUp">
+            <div className="flex flex-col items-center space-y-6 animate-fadeInUp">
               {user?.image ? (
                 <img
                   src={user.image}
@@ -198,7 +199,7 @@ const Dashboard = () => {
                   <span className="text-gray-400 text-sm font-medium">No Image</span>
                 </div>
               )}
-              <div className="text-white">
+              <div className="text-white text-center">
                 <h3 className="text-xl sm:text-2xl font-bold md:text-3xl mb-5 text-gray-200">Profile Details</h3>
                 <p className="text-gray-300 text-sm sm:text-base"><strong>Name:</strong> {user?.name}</p>
                 <p className="text-gray-300 text-sm sm:text-base"><strong>Email:</strong> {user?.email}</p>

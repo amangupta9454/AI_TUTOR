@@ -1,16 +1,28 @@
-import { useState, useEffect } from "react"
-import { GoogleGenerativeAI } from "@google/generative-ai"
+import { useState, useEffect } from "react";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// Tries to parse strict JSON, then removes common issues like trailing commas if needed
+// Tries to parse strict JSON, removing common issues like trailing commas, comments, and markdown
 const safeParseJson = (text) => {
   try {
-    return JSON.parse(text)
-  } catch {
-    // Remove trailing commas before } or ]
-    const fixed = text.replace(/,(\s*[}\]])/g, "$1")
-    return JSON.parse(fixed)
+    return JSON.parse(text);
+  } catch (err) {
+    console.error("Initial JSON parse failed:", err.message);
+    // Clean text by removing markdown, comments, and trailing commas
+    const cleanedText = text
+      .replace(/```json\n?/g, "") // Remove ```json
+      .replace(/```\n?/g, "") // Remove ```
+      .replace(/\/\/.*?\n/g, "") // Remove single-line comments
+      .replace(/\/\*[\s\S]*?\*\//g, "") // Remove multi-line comments
+      .replace(/,(\s*[}\]])/g, "$1") // Remove trailing commas
+      .trim();
+    try {
+      return JSON.parse(cleanedText);
+    } catch (cleanError) {
+      console.error("Failed to parse cleaned JSON:", cleanError.message);
+      throw new Error("Invalid JSON format after cleaning");
+    }
   }
-}
+};
 
 const CareerPath = () => {
   const [formData, setFormData] = useState({
@@ -28,40 +40,41 @@ const CareerPath = () => {
     currentCollege: "",
     workExperience: "",
     currentJob: "",
-  })
+  });
 
-  const [roadmap, setRoadmap] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
-  const [isMounted, setIsMounted] = useState(false)
+  const [roadmap, setRoadmap] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true)
-  }, [])
+    setIsMounted(true);
+  }, []);
 
-  const genAI = new GoogleGenerativeAI("AIzaSyDgYVIkudqdxLcRBQfOSAluvuZAVqmrK3U")
+  // WARNING: Hardcoding API keys in frontend code is insecure. Consider moving to a backend service.
+  const genAI = new GoogleGenerativeAI("AIzaSyDgYVIkudqdxLcRBQfOSAluvuZAVqmrK3U");
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-    }))
-  }
+    }));
+  };
 
   const generatePrompt = () => {
-    const userType = formData.workingStatus
-    const isStudent = userType === "student"
+    const userType = formData.workingStatus;
+    const isStudent = userType === "student";
     const isGraduate =
       userType === "graduate" ||
       formData.currentClass === "graduation" ||
       formData.currentClass === "final-year" ||
-      formData.currentClass === "postgraduation"
-    const isProfessional = userType === "working"
-    const isClass9or10 = formData.currentClass === "9" || formData.currentClass === "10"
-    const isClass11or12 = formData.currentClass === "11" || formData.currentClass === "12"
+      formData.currentClass === "postgraduation";
+    const isProfessional = userType === "working";
+    const isClass9or10 = formData.currentClass === "9" || formData.currentClass === "10";
+    const isClass11or12 = formData.currentClass === "11" || formData.currentClass === "12";
 
-    return `
+    const existingPrompt = `
     You are an expert Indian career counselor. Create a COMPREHENSIVE, DETAILED, and ACTIONABLE career roadmap.
 
     USER PROFILE:
@@ -426,19 +439,25 @@ const CareerPath = () => {
         }
       ] or null
     }
+    `;
 
-    Keep everything COMPREHENSIVE yet SIMPLE and PRACTICAL. Provide maximum information for Indian students at all levels.
-    `
-  }
+    return `
+      ${existingPrompt}
+      ADDITIONAL INSTRUCTIONS:
+      - Respond ONLY with valid JSON. Do NOT include comments (// or /* */), markdown (e.g., \`\`\`json), or any text outside the JSON object.
+      - Ensure the JSON is properly formatted with no trailing commas or invalid syntax.
+      - The response must strictly follow the specified JSON structure.
+    `;
+  };
 
   const generateRoadmap = async () => {
     if (!formData.currentClass && !formData.currentAge) {
-      setError("Please fill in your current status")
-      return
+      setError("Please fill in your current status");
+      return;
     }
 
-    setLoading(true)
-    setError("")
+    setLoading(true);
+    setError("");
 
     try {
       const model = genAI.getGenerativeModel({
@@ -449,35 +468,42 @@ const CareerPath = () => {
           topP: 0.8,
           maxOutputTokens: 8192,
         },
-      })
+      });
 
-      const prompt = generatePrompt()
-      const result = await model.generateContent(prompt)
-      const response = await result.response
-      const text = response.text()
+      const prompt = generatePrompt();
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      const text = response.text();
 
+      // Log raw response for debugging
+      // console.log("Raw API response:", text);
+
+      // Clean and extract JSON
       const cleanedText = text
         .replace(/```json\n?/g, "")
         .replace(/```\n?/g, "")
-        .trim()
+        .trim();
 
-      const jsonStart = cleanedText.indexOf("{")
-      const jsonEnd = cleanedText.lastIndexOf("}") + 1
+      const jsonStart = cleanedText.indexOf("{");
+      const jsonEnd = cleanedText.lastIndexOf("}") + 1;
 
-      if (jsonStart !== -1 && jsonEnd > jsonStart) {
-        const jsonText = cleanedText.substring(jsonStart, jsonEnd)
-        const roadmapData = safeParseJson(jsonText)
-        setRoadmap(roadmapData)
-      } else {
-        throw new Error("Invalid response format")
+      if (jsonStart === -1 || jsonEnd <= jsonStart) {
+        console.error("No valid JSON found in response:", cleanedText);
+        throw new Error("Invalid response format: No valid JSON found");
       }
+
+      const jsonText = cleanedText.substring(jsonStart, jsonEnd);
+      // console.log("Extracted JSON text:", jsonText);
+
+      const roadmapData = safeParseJson(jsonText);
+      setRoadmap(roadmapData);
     } catch (err) {
-      console.error("Error generating roadmap:", err)
-      setError("Failed to generate roadmap. Please try again with different inputs.")
+      console.error("Error generating roadmap:", err.message);
+      setError("Failed to generate roadmap. Please try again with different inputs.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const StepCard = ({ step }) => (
     <div className="relative mb-8 group">
@@ -488,18 +514,18 @@ const CareerPath = () => {
         </div>
       </div>
     </div>
-  )
+  );
 
   const StepContent = ({ step }) => (
     <>
       <div className="mb-6">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-4">
-          <h3 className="text-2xl font-bold text-white">{step.title}</h3>
+          <h3 className="text-2xl font-bold text-white">{step.title || "Untitled Step"}</h3>
           <span className="bg-white/10 text-white px-4 py-2 rounded-full text-sm font-semibold border border-white/20">
-            {step.timeframe}
+            {step.timeframe || "N/A"}
           </span>
         </div>
-        <p className="text-gray-300 text-lg leading-relaxed">{step.description}</p>
+        <p className="text-gray-300 text-lg leading-relaxed">{step.description || "No description available"}</p>
       </div>
 
       <div className="mb-6">
@@ -508,7 +534,7 @@ const CareerPath = () => {
           Action Steps:
         </h4>
         <div className="space-y-3">
-          {step.actions.map((action, idx) => (
+          {(step.actions || []).map((action, idx) => (
             <div
               key={idx}
               className="flex items-start space-x-3 p-3 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all duration-300"
@@ -517,6 +543,9 @@ const CareerPath = () => {
               <span className="text-gray-200 flex-1">{action}</span>
             </div>
           ))}
+          {(!step.actions || step.actions.length === 0) && (
+            <p className="text-gray-300">No actions specified</p>
+          )}
         </div>
       </div>
 
@@ -532,10 +561,10 @@ const CareerPath = () => {
                 key={idx}
                 className="bg-white/5 p-4 rounded-xl border border-white/10 hover:border-white/20 transition-all duration-300"
               >
-                <h5 className="font-bold text-gray-200 text-lg mb-2">{stream.stream}</h5>
-                <p className="text-gray-300 text-sm mb-3">{stream.description}</p>
+                <h5 className="font-bold text-gray-200 text-lg mb-2">{stream.stream || "Unnamed Stream"}</h5>
+                <p className="text-gray-300 text-sm mb-3">{stream.description || "No description"}</p>
                 <div className="flex flex-wrap gap-2">
-                  {stream.careers.map((career, careerIdx) => (
+                  {(stream.careers || []).map((career, careerIdx) => (
                     <span
                       key={careerIdx}
                       className="bg-white/10 text-gray-200 px-2 py-1 rounded text-xs border border-white/20"
@@ -603,9 +632,9 @@ const CareerPath = () => {
                 className="bg-white/5 p-4 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300"
               >
                 <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start mb-3">
-                  <h5 className="font-bold text-gray-200 text-lg">{exam.name}</h5>
+                  <h5 className="font-bold text-gray-200 text-lg">{exam.name || "Unnamed Exam"}</h5>
                   <div className="flex flex-col lg:items-end mt-2 lg:mt-0">
-                    <span className="text-sm text-gray-300 bg-white/10 px-3 py-1 rounded-full">{exam.date}</span>
+                    <span className="text-sm text-gray-300 bg-white/10 px-3 py-1 rounded-full">{exam.date || "N/A"}</span>
                     <span
                       className={`text-xs px-3 py-1 rounded-full mt-2 ${
                         exam.importance === "Must have"
@@ -615,7 +644,7 @@ const CareerPath = () => {
                             : "bg-green-500/20 text-green-300 border border-green-400/30"
                       }`}
                     >
-                      {exam.importance}
+                      {exam.importance || "Optional"}
                     </span>
                   </div>
                 </div>
@@ -661,9 +690,9 @@ const CareerPath = () => {
                   <p className="text-gray-200">{college}</p>
                 ) : (
                   <div>
-                    <h5 className="font-bold text-gray-200 text-lg">{college.name}</h5>
-                    <p className="text-gray-300 text-sm">📍 {college.location}</p>
-                    <p className="text-gray-300 text-sm">🏛️ {college.type}</p>
+                    <h5 className="font-bold text-gray-200 text-lg">{college.name || "Unnamed College"}</h5>
+                    <p className="text-gray-300 text-sm">📍 {college.location || "N/A"}</p>
+                    <p className="text-gray-300 text-sm">🏛️ {college.type || "N/A"}</p>
                     {college.fees && <p className="text-gray-300 text-sm">💰 Fees: {college.fees}</p>}
                     {college.cutoff && <p className="text-gray-300 text-sm">📊 Cutoff: {college.cutoff}</p>}
                   </div>
@@ -686,10 +715,10 @@ const CareerPath = () => {
                 key={idx}
                 className="bg-white/5 p-4 rounded-xl border border-white/10 hover:border-white/20 transition-all duration-300"
               >
-                <h5 className="font-bold text-gray-200">{job.position}</h5>
-                <p className="text-gray-300 text-sm">🏢 {job.organization}</p>
-                <p className="text-gray-300 text-sm">📝 Exam: {job.exam}</p>
-                <p className="text-gray-300 text-sm">💰 Salary: {job.salary}</p>
+                <h5 className="font-bold text-gray-200">{job.position || "Unnamed Position"}</h5>
+                <p className="text-gray-300 text-sm">🏢 {job.organization || "N/A"}</p>
+                <p className="text-gray-300 text-sm">📝 Exam: {job.exam || "N/A"}</p>
+                <p className="text-gray-300 text-sm">💰 Salary: {job.salary || "N/A"}</p>
               </div>
             ))}
           </div>
@@ -744,7 +773,7 @@ const CareerPath = () => {
         )}
       </div>
     </>
-  )
+  );
 
   return (
     <section className="relative min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black overflow-hidden flex items-center justify-center pt-20">
@@ -1097,14 +1126,14 @@ const CareerPath = () => {
                   <span className="text-2xl mr-3">📍</span>
                   Where You Are Now
                 </h3>
-                <p className="text-gray-300">{roadmap.currentSituation}</p>
+                <p className="text-gray-300">{roadmap.currentSituation || "No current situation provided"}</p>
               </div>
               <div className="bg-white/5 p-6 rounded-3xl border border-white/10 hover:border-white/20 transition-all duration-500">
                 <h3 className="text-xl font-bold text-gray-200 mb-3 flex items-center">
                   <span className="text-2xl mr-3">🎯</span>
                   Your Career Options
                 </h3>
-                <p className="text-gray-300">{roadmap.targetCareer}</p>
+                <p className="text-gray-300">{roadmap.targetCareer || "No career options provided"}</p>
               </div>
             </div>
 
@@ -1119,21 +1148,21 @@ const CareerPath = () => {
                       key={idx}
                       className="bg-white/5 p-6 rounded-3xl border border-white/10 hover:border-white/20 transition-all duration-500"
                     >
-                      <h4 className="text-xl font-bold text-gray-200 mb-3">{option.service}</h4>
+                      <h4 className="text-xl font-bold text-gray-200 mb-3">{option.service || "Unnamed Service"}</h4>
                       <p className="text-gray-300 text-sm mb-2">
-                        <strong>Ranks:</strong> {option.ranks.join(", ")}
+                        <strong>Ranks:</strong> {(option.ranks || []).join(", ") || "N/A"}
                       </p>
                       <p className="text-gray-300 text-sm mb-2">
-                        <strong>Exams:</strong> {option.exams.join(", ")}
+                        <strong>Exams:</strong> {(option.exams || []).join(", ") || "N/A"}
                       </p>
                       <p className="text-gray-300 text-sm mb-2">
-                        <strong>Eligibility:</strong> {option.eligibility}
+                        <strong>Eligibility:</strong> {option.eligibility || "N/A"}
                       </p>
                       <p className="text-gray-300 text-sm mb-2">
-                        <strong>Salary:</strong> {option.salary}
+                        <strong>Salary:</strong> {option.salary || "N/A"}
                       </p>
                       <p className="text-gray-300 text-sm">
-                        <strong>Benefits:</strong> {option.benefits}
+                        <strong>Benefits:</strong> {option.benefits || "N/A"}
                       </p>
                     </div>
                   ))}
@@ -1152,15 +1181,15 @@ const CareerPath = () => {
                       key={idx}
                       className="bg-white/5 p-6 rounded-3xl border border-white/10 hover:border-white/20 transition-all duration-500"
                     >
-                      <h4 className="text-xl font-bold text-gray-200 mb-3">{option.field}</h4>
+                      <h4 className="text-xl font-bold text-gray-200 mb-3">{option.field || "Unnamed Field"}</h4>
                       <p className="text-gray-300 text-sm mb-2">
-                        <strong>Scope:</strong> {option.scope}
+                        <strong>Scope:</strong> {option.scope || "N/A"}
                       </p>
                       <p className="text-gray-300 text-sm mb-2">
-                        <strong>Salary:</strong> {option.salary}
+                        <strong>Salary:</strong> {option.salary || "N/A"}
                       </p>
                       <p className="text-gray-300 text-sm mb-2">
-                        <strong>Growth:</strong> {option.growth}
+                        <strong>Growth:</strong> {option.growth || "N/A"}
                       </p>
                       {option.entryLevel && (
                         <p className="text-gray-300 text-sm mb-2">
@@ -1185,11 +1214,11 @@ const CareerPath = () => {
 
             <div className="mb-12">
               <h3 className="text-3xl font-bold text-center text-white mb-8 animate-fadeInUp">
-                📅 Step-by-Step Plan ({roadmap.timeline})
+                📅 Step-by-Step Plan ({roadmap.timeline || "N/A"})
               </h3>
               <div className="space-y-6">
-                {roadmap.roadmap.map((step, index) => (
-                  <StepCard key={index} step={step} index={index} total={roadmap.roadmap.length} />
+                {(roadmap.roadmap || []).map((step, index) => (
+                  <StepCard key={index} step={step} />
                 ))}
               </div>
             </div>
@@ -1201,12 +1230,15 @@ const CareerPath = () => {
                   Quick Wins (Start Today!)
                 </h3>
                 <ul className="space-y-3">
-                  {roadmap.quickWins.map((win, idx) => (
+                  {(roadmap.quickWins || []).map((win, idx) => (
                     <li key={idx} className="text-gray-300 flex items-start">
                       <span className="text-gray-400 mr-3 mt-1">✓</span>
                       {win}
                     </li>
                   ))}
+                  {(!roadmap.quickWins || roadmap.quickWins.length === 0) && (
+                    <p className="text-gray-300">No quick wins specified</p>
+                  )}
                 </ul>
               </div>
               <div className="bg-white/5 p-6 rounded-3xl border border-white/10 hover:border-white/20 transition-all duration-500">
@@ -1215,12 +1247,15 @@ const CareerPath = () => {
                   Immediate Next Steps
                 </h3>
                 <ul className="space-y-3">
-                  {roadmap.nextSteps.map((step, idx) => (
+                  {(roadmap.nextSteps || []).map((step, idx) => (
                     <li key={idx} className="text-gray-300 flex items-start">
                       <span className="text-gray-400 mr-3 mt-1">▶</span>
                       {step}
                     </li>
                   ))}
+                  {(!roadmap.nextSteps || roadmap.nextSteps.length === 0) && (
+                    <p className="text-gray-300">No next steps specified</p>
+                  )}
                 </ul>
               </div>
             </div>
@@ -1232,13 +1267,13 @@ const CareerPath = () => {
                   Useful Resources
                 </h3>
                 <div className="space-y-4">
-                  {roadmap.resources.map((resource, idx) => (
+                  {(roadmap.resources || []).map((resource, idx) => (
                     <div
                       key={idx}
                       className="bg-white/5 p-4 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300"
                     >
-                      <h4 className="font-medium text-gray-200 text-sm">{resource.name}</h4>
-                      <p className="text-gray-300 text-xs mb-2">{resource.description}</p>
+                      <h4 className="font-medium text-gray-200 text-sm">{resource.name || "Unnamed Resource"}</h4>
+                      <p className="text-gray-300 text-xs mb-2">{resource.description || "No description"}</p>
                       {resource.link && (
                         <a
                           href={resource.link}
@@ -1251,6 +1286,9 @@ const CareerPath = () => {
                       )}
                     </div>
                   ))}
+                  {(!roadmap.resources || roadmap.resources.length === 0) && (
+                    <p className="text-gray-300">No resources specified</p>
+                  )}
                 </div>
               </div>
               <div className="bg-white/5 p-6 rounded-3xl border border-white/10 hover:border-white/20 transition-all duration-500">
@@ -1259,12 +1297,15 @@ const CareerPath = () => {
                   Alternative Paths
                 </h3>
                 <ul className="space-y-3">
-                  {roadmap.alternatives.map((alt, idx) => (
+                  {(roadmap.alternatives || []).map((alt, idx) => (
                     <li key={idx} className="text-gray-300 flex items-start">
                       <span className="text-gray-400 mr-3 mt-1">•</span>
                       {alt}
                     </li>
                   ))}
+                  {(!roadmap.alternatives || roadmap.alternatives.length === 0) && (
+                    <p className="text-gray-300">No alternative paths specified</p>
+                  )}
                 </ul>
               </div>
             </div>
@@ -1329,7 +1370,7 @@ const CareerPath = () => {
         }
       `}</style>
     </section>
-  )
-}
+  );
+};
 
-export default CareerPath
+export default CareerPath;
