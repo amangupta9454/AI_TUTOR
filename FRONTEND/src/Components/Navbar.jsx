@@ -35,12 +35,14 @@ const Navbar = () => {
           { name: 'Email Generator', to: '/email' },
           { name: 'Career Path', to: '/career' },
           {name: "Resume builder", to: "/resume"},
+          {name:"Carrer Analyzer",to:"/carreranalyzer"},
         ]
       : [
           { name: 'Career Path', to: '/career' },
            {name: "Resume builder", to: "/resume"},
           { name: 'Login', to: '/login' },
           { name: 'Contact', to: '/contact' },
+          {name:"Carrer Analyzer",to:"/carreranalyzer"},
 
          
         ]),
