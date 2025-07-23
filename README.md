@@ -20,6 +20,7 @@ Your AI-Powered Career Companion is a full-stack MERN web application leveraging
   <li><a href="#enhancements">Future Enhancements</a></li>
   <li><a href="#contact">Contact Me</a></li>
   <li><a href="#creator">Created By</a></li>
+  <li><a href="#screenshots">Preview</a></li>
 </ul>
 
 <hr>
