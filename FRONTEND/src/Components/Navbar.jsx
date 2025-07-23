@@ -5,15 +5,31 @@ import { FiMenu, FiX } from 'react-icons/fi';
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
   const navigate = useNavigate();
 
-  // Check authentication status on mount and update
+  // Monitor authentication status changes
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    setIsAuthenticated(!!token);
-    const timer = setTimeout(() => setIsVisible(true), 100);
-    return () => clearTimeout(timer);
+    setIsVisible(true);
+    
+    // Add event listener for storage changes (for cross-tab sync)
+    const handleStorageChange = () => {
+      const token = localStorage.getItem('token');
+      setIsAuthenticated(!!token);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Check token periodically
+    const interval = setInterval(() => {
+      const token = localStorage.getItem('token');
+      setIsAuthenticated(!!token);
+    }, 1000);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
+    };
   }, []);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
@@ -23,29 +39,16 @@ const Navbar = () => {
     setIsAuthenticated(false);
     setMenuOpen(false);
     navigate('/login');
+    window.dispatchEvent(new Event('storage')); // Trigger storage event
   };
 
   const navLinks = [
     { name: 'Home', to: '/' },
-    ...(isAuthenticated
-      ? [
-          { name: 'Dashboard', to: '/dashboard' },
-          { name: 'Contact', to: '/contact' },
-           { name: 'Interview Prep', to: '/interview-prep' },
-          { name: 'Email Generator', to: '/email' },
-          { name: 'Career Path', to: '/career' },
-          {name: "Resume builder", to: "/resume"},
-          {name:"Carrer Analyzer",to:"/carreranalyzer"},
-        ]
-      : [
-          { name: 'Career Path', to: '/career' },
-           {name: "Resume builder", to: "/resume"},
-          { name: 'Login', to: '/login' },
-          { name: 'Contact', to: '/contact' },
-          {name:"Carrer Analyzer",to:"/carreranalyzer"},
-
-         
-        ]),
+    { name: 'Career Path', to: '/career' },
+    { name: 'Resume Builder', to: '/resume' },
+    { name: 'Career Analyzer', to: '/carreranalyzer' },
+    { name: 'Contact', to: '/contact' },
+    ...(isAuthenticated ? [{ name: 'Dashboard', to: '/dashboard' }] : [{ name: 'Login', to: '/login' }]),
   ];
 
   return (
@@ -56,18 +59,12 @@ const Navbar = () => {
     >
       <div className="backdrop-blur-xl bg-[#020617]/90 shadow-[0_8px_30px_rgba(0,0,0,0.6)] border-b border-[#1e293b]">
         <div className="max-w-7xl mx-auto px-6 sm:px-10 py-4 flex items-center justify-between">
-          {/* Logo */}
-          {/* <div className="text-3xl font-semibold italic tracking-wide bg-gradient-to-r from-purple-500 via-pink-500 to-blue-400 text-transparent bg-clip-text">
-            Ai_Career
-          </div> */}
-          <div className="text-3xl font-bold tracking-wide bg-gray-300 text-transparent bg-clip-text"
-            style={{ fontFamily: "'Rowdies', sans-serif",
-              fontWeight: '500',
-            }}>
-
+          <div
+            className="text-3xl font-bold tracking-wide bg-gray-300 text-transparent bg-clip-text"
+            style={{ fontFamily: "'Rowdies', sans-serif", fontWeight: '500' }}
+          >
             AI_Career
           </div>
-          
 
           {/* Desktop Links */}
           <div className="hidden md:flex space-x-10">

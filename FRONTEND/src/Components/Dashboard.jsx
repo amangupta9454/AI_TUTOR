@@ -1,9 +1,10 @@
 
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { FiMenu, FiX } from 'react-icons/fi';
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -12,6 +13,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [visibleQuestions, setVisibleQuestions] = useState({});
   const [isMounted, setIsMounted] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -53,6 +55,7 @@ const Dashboard = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
+    window.dispatchEvent(new Event('storage')); // Trigger storage event
   };
 
   const toggleQuestions = (sessionId) => {
@@ -61,6 +64,14 @@ const Dashboard = () => {
       [sessionId]: !prev[sessionId],
     }));
   };
+
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
+  const sidebarLinks = [
+    { name: 'Interview Prep', to: '/interview-prep' },
+    { name: 'Email Generator', to: '/email' },
+    { name: 'Resume Builder', to: '/resume' },
+  ];
 
   if (loading) {
     return (
@@ -122,112 +133,149 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className={`relative mt-10 z-10 max-w-7xl w-full mx-4 sm:mx-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 sm:p-8 md:p-12 shadow-2xl hover:shadow-gray-500/25 transition-all duration-500 transform ${isMounted ? 'animate-formEntrance' : 'opacity-0 translate-y-10'}`}>
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-300 to-gray-500 mb-8 text-center animate-fadeInUp">
-          Welcome, {user?.name}!
-        </h2>
-        <div className="space-y-12">
-          <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-10 animate-fadeInUp">
-            {user?.image ? (
-              <img
-                src={user.image}
-                alt="Profile"
-                className="w-32 h-32 sm:w-36 sm:h-36 rounded-full object-cover border-4 border-white/20 shadow-xl transition-transform duration-500 hover:scale-110 hover:shadow-gray-500/30"
-                onError={(e) => {
-                  console.error('Image failed to load:', user.image);
-                  e.target.src = 'https://via.placeholder.com/96';
-                }}
-                // onLoad={() => console.log('Image loaded successfully:', user.image)}
-              />
-            ) : (
-              <div className="w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-white/5 flex items-center justify-center border-4 border-white/20 shadow-xl">
-                <span className="text-gray-400 text-sm font-medium">No Image</span>
-              </div>
-            )}
-            <div className="text-white">
-              <h3 className="text-xl sm:text-2xl font-bold md:text-3xl mb-5 text-gray-200">Profile Details</h3>
-              <p className="text-gray-300 text-sm sm:text-base"><strong>Name:</strong> {user?.name}</p>
-              <p className="text-gray-300 text-sm sm:text-base"><strong>Email:</strong> {user?.email}</p>
-              <p className="text-gray-300 text-sm sm:text-base"><strong>Mobile:</strong> {user?.mobile}</p>
-              <p className="text-gray-300 text-sm sm:text-base"><strong>Course:</strong> {user?.course}</p>
-              <p className="text-gray-300 text-sm sm:text-base"><strong>Year/Class:</strong> {user?.year}</p>
-              <p className="text-gray-300 text-sm sm:text-base"><strong>Roll Number:</strong> {user?.rollNumber}</p>
-              <p className="text-gray-300 text-sm sm:text-base">
-                <strong>Address:</strong> {user?.address?.street}, {user?.address?.city},{' '}
-                {user?.address?.state}, {user?.address?.pincode}
-              </p>
-            </div>
+      <div className="relative z-10 max-w-7xl w-full mx-4 sm:mx-6 flex flex-col md:flex-row gap-6">
+        {/* Sidebar */}
+        <div
+          className={`fixed md:static top-0 left-0 h-full md:h-auto w-64 bg-[#0f172a]/90 backdrop-blur-xl border-r border-white/10 p-6 transition-transform duration-300 ${
+            sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+          } md:w-64 md:flex-shrink-0`}
+        >
+          <div className="flex items-center justify-between mb-8">
+            <h3 className="text-xl font-bold text-white">Menu</h3>
+            <button className="md:hidden text-2xl text-gray-300 hover:text-white" onClick={toggleSidebar}>
+              <FiX />
+            </button>
           </div>
-
-          <div className="mt-12">
-            <h3 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-200 mb-8 animate-fadeInUp">Your Interview Prep Sessions</h3>
-            {sessions.length === 0 ? (
-              <p className="text-gray-400 text-center text-lg sm:text-xl font-medium animate-fadeInUp">No sessions found. Create one in Interview Prep!</p>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-                {sessions.map((session, index) => (
-                  <div
-                    key={session._id}
-                    className="relative bg-white/5 backdrop-blur-xl p-6 sm:p-8 rounded-2xl border border-white/10 shadow-lg hover:shadow-xl hover:shadow-gray-500/25 hover:-translate-y-2 transition-all duration-500 animate-fadeInUp"
-                    style={{ animationDelay: `${0.15 * (index + 1)}s` }}
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-br from-gray-500/10 to-gray-300/10 rounded-2xl opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
-                    <div className="relative">
-                      <h4 className="text-lg sm:text-xl font-bold text-white mb-4">{session.role}</h4>
-                      <p className="text-gray-300 text-sm">
-                        <strong>Experience:</strong> {session.experience} Years
-                      </p>
-                      <p className="text-gray-300 text-sm">
-                        <strong>Skills:</strong> {session.topicsToFocus}
-                      </p>
-                      <button
-                        onClick={() => toggleQuestions(session._id)}
-                        className="group relative w-full mt-5 py-2.5 px-4 bg-gradient-to-r from-gray-600 to-gray-400 text-white font-semibold rounded-xl shadow-md hover:shadow-lg hover:shadow-gray-500/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden"
-                      >
-                        <div className="absolute inset-0 bg-gradient-to-r from-gray-600 to-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <div className="relative">{visibleQuestions[session._id] ? 'Hide Questions' : 'View Questions'}</div>
-                      </button>
-                      {visibleQuestions[session._id] && (
-                        <div className="mt-6 space-y-5 animate-slideDown">
-                          <h5 className="text-md sm:text-lg font-semibold text-gray-200">Questions</h5>
-                          {session.questions.length === 0 ? (
-                            <p className="text-gray-400 text-sm">No questions in this session.</p>
-                          ) : (
-                            <div className="space-y-5">
-                              {session.questions.map((q) => (
-                                <div
-                                  key={q._id}
-                                  className="bg-white/5 p-5 rounded-lg border border-white/10 transition-all duration-300 hover:border-gray-500/50 hover:shadow-md"
-                                >
-                                  <h6 className="text-gray-200 font-medium text-sm sm:text-base">{q.question}</h6>
-                                  <div className="text-gray-300 prose prose-invert max-w-none text-sm sm:text-base">
-                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{q.answer}</ReactMarkdown>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+          <div className="space-y-4">
+            {sidebarLinks.map((link) => (
+              <Link
+                key={link.name}
+                to={link.to}
+                onClick={() => setSidebarOpen(false)}
+                className="block text-gray-200 hover:text-white text-lg font-medium tracking-wide transition-all duration-200"
+              >
+                {link.name}
+              </Link>
+            ))}
+            <button
+              onClick={handleLogout}
+              className="block text-gray-200 hover:text-white text-lg font-medium tracking-wide transition-all duration-200"
+            >
+              Logout
+            </button>
           </div>
+        </div>
 
+        {/* Main Content */}
+        <div
+          className={`relative flex-1 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 sm:p-8 md:p-12 shadow-2xl hover:shadow-gray-500/25 transition-all duration-500 transform ${
+            isMounted ? 'animate-formEntrance' : 'opacity-0 translate-y-10'
+          }`}
+        >
           <button
-            onClick={handleLogout}
-            className="group relative w-full mt-10 py-3.5 px-6 bg-gradient-to-r from-gray-600 to-gray-400 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:shadow-gray-500/50 transition-all duration-500 hover:-translate-y-1 overflow-hidden"
+            className="md:hidden text-3xl text-gray-300 hover:text-white mb-6"
+            onClick={toggleSidebar}
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-gray-600 to-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl"></div>
-            <div className="relative">Logout</div>
+            <FiMenu />
           </button>
-          <p className="mt-6 text-center text-gray-300 animate-fadeInUp">
-            <a href="/interview-prep" className="text-gray-300 hover:text-white transition-all duration-300 hover:underline hover:scale-105 inline-block">
-              Go to Interview Prep
-            </a>
-          </p>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-300 to-gray-500 mb-8 text-center animate-fadeInUp">
+            Welcome, {user?.name}!
+          </h2>
+          <div className="space-y-12">
+            <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-10 animate-fadeInUp">
+              {user?.image ? (
+                <img
+                  src={user.image}
+                  alt="Profile"
+                  className="w-32 h-32 sm:w-36 sm:h-36 rounded-full object-cover border-4 border-white/20 shadow-xl transition-transform duration-500 hover:scale-110 hover:shadow-gray-500/30"
+                  onError={(e) => {
+                    console.error('Image failed to load:', user.image);
+                    e.target.src = 'https://via.placeholder.com/96';
+                  }}
+                />
+              ) : (
+                <div className="w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-white/5 flex items-center justify-center border-4 border-white/20 shadow-xl">
+                  <span className="text-gray-400 text-sm font-medium">No Image</span>
+                </div>
+              )}
+              <div className="text-white">
+                <h3 className="text-xl sm:text-2xl font-bold md:text-3xl mb-5 text-gray-200">Profile Details</h3>
+                <p className="text-gray-300 text-sm sm:text-base"><strong>Name:</strong> {user?.name}</p>
+                <p className="text-gray-300 text-sm sm:text-base"><strong>Email:</strong> {user?.email}</p>
+                <p className="text-gray-300 text-sm sm:text-base"><strong>Mobile:</strong> {user?.mobile}</p>
+                <p className="text-gray-300 text-sm sm:text-base"><strong>Course:</strong> {user?.course}</p>
+                <p className="text-gray-300 text-sm sm:text-base"><strong>Year/Class:</strong> {user?.year}</p>
+                <p className="text-gray-300 text-sm sm:text-base"><strong>Roll Number:</strong> {user?.rollNumber}</p>
+                <p className="text-gray-300 text-sm sm:text-base">
+                  <strong>Address:</strong> {user?.address?.street}, {user?.address?.city},{' '}
+                  {user?.address?.state}, {user?.address?.pincode}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-12">
+              <h3 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-200 mb-8 animate-fadeInUp">Your Interview Prep Sessions</h3>
+              {sessions.length === 0 ? (
+                <p className="text-gray-400 text-center text-lg sm:text-xl font-medium animate-fadeInUp">No sessions found. Create one in Interview Prep!</p>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                  {sessions.map((session, index) => (
+                    <div
+                      key={session._id}
+                      className="relative bg-white/5 backdrop-blur-xl p-6 sm:p-8 rounded-2xl border border-white/10 shadow-lg hover:shadow-xl hover:shadow-gray-500/25 hover:-translate-y-2 transition-all duration-500 animate-fadeInUp"
+                      style={{ animationDelay: `${0.15 * (index + 1)}s` }}
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-br from-gray-500/10 to-gray-300/10 rounded-2xl opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
+                      <div className="relative">
+                        <h4 className="text-lg sm:text-xl font-bold text-white mb-4">{session.role}</h4>
+                        <p className="text-gray-300 text-sm">
+                          <strong>Experience:</strong> {session.experience} Years
+                        </p>
+                        <p className="text-gray-300 text-sm">
+                          <strong>Skills:</strong> {session.topicsToFocus}
+                        </p>
+                        <button
+                          onClick={() => toggleQuestions(session._id)}
+                          className="group relative w-full mt-5 py-2.5 px-4 bg-gradient-to-r from-gray-600 to-gray-400 text-white font-semibold rounded-xl shadow-md hover:shadow-lg hover:shadow-gray-500/50 transition-all duration-300 transform hover:-translate-y-1 overflow-hidden"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-gray-600 to-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <div className="relative">{visibleQuestions[session._id] ? 'Hide Questions' : 'View Questions'}</div>
+                        </button>
+                        {visibleQuestions[session._id] && (
+                          <div className="mt-6 space-y-5 animate-slideDown">
+                            <h5 className="text-md sm:text-lg font-semibold text-gray-200">Questions</h5>
+                            {session.questions.length === 0 ? (
+                              <p className="text-gray-400 text-sm">No questions in this session.</p>
+                            ) : (
+                              <div className="space-y-5">
+                                {session.questions.map((q) => (
+                                  <div
+                                    key={q._id}
+                                    className="bg-white/5 p-5 rounded-lg border border-white/10 transition-all duration-300 hover:border-gray-500/50 hover:shadow-md"
+                                  >
+                                    <h6 className="text-gray-200 font-medium text-sm sm:text-base">{q.question}</h6>
+                                    <div className="text-gray-300 prose prose-invert max-w-none text-sm sm:text-base">
+                                      <ReactMarkdown remarkPlugins={[remarkGfm]}>{q.answer}</ReactMarkdown>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <p className="mt-6 text-center text-gray-300 animate-fadeInUp">
+              <a href="/interview-prep" className="text-gray-300 hover:text-white transition-all duration-300 hover:underline hover:scale-105 inline-block">
+                Go to Interview Prep
+              </a>
+            </p>
+          </div>
         </div>
       </div>
 

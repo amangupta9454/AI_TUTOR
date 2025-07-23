@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Eye, EyeOff } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Register = () => {
   const { register, handleSubmit, formState: { errors }, watch } = useForm();
@@ -464,9 +465,9 @@ const Register = () => {
 
         <p className="mt-6 text-center text-gray-300 animate-fadeInUp">
           Already have an account?{' '}
-          <a href="/login" className="text-gray-300 hover:text-white transition-all duration-300 hover:underline hover:scale-105 inline-block">
+          <Link to="/login" className="text-gray-300 hover:text-white transition-all duration-300 hover:underline hover:scale-105 inline-block">
             Login
-          </a>
+          </Link>
         </p>
       </div>
 
