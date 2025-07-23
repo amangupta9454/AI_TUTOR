@@ -262,4 +262,32 @@ The backend typically runs on http://localhost:5000 (configurable in server.js).
                    <h2 id="creator">👨‍💻 Created By</h2> 
                    <p><strong>Aman Gupta</strong><br>B.Tech 3rd year Student | HIET Ghaziabad<br>Passionate about tech and sustainable Applications 🌱</p>
                     <p align="center">⭐ If you found this project helpful, give it a star!</p>
+## 📸 Screenshots
+
+<div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
+    <h2 id="screenshots" style="color: #4CAF50; font-size: 28px; font-weight: bold; margin-bottom: 20px;">📸 Screenshots</h2>
+    <p style="font-size: 16px; color: #666; margin-bottom: 20px;">
+        Explore the interface of Your AI-Powered Career Companion through the screenshots below, showcasing key features like the Home Page, Resume Builder, and Email Generator.
+    </p>
+    <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 20px;">
+        <div style="flex: 1 1 280px; background-color: #fff; padding: 15px; text-align: center; border: 1px solid #ddd;">
+            <h3 style="color: #333; font-size: 20px; font-weight: bold; margin: 0 0 10px;">Home Page</h3>
+            <img src="https://res.cloudinary.com/dgtyqhtor/image/upload/v1753290343/Screenshot_2025-07-21_103925_atbp20.png" alt="Home Page" style="max-width: 100%; height: auto; border: 1px solid #ddd;">
+        </div>
+        <div style="flex: 1 1 280px; background-color: #fff; padding: 15px; text-align: center; border: 1px solid #ddd;">
+            <h3 style="color: #333; font-size: 20px; font-weight: bold; margin: 0 0 10px;">Career Path</h3>
+            <img src="https://res.cloudinary.com/dgtyqhtor/image/upload/v1753290328/Screenshot_2025-07-23_223401_vqe4ou.png" alt="Resume Builder" style="max-width: 100%; height: auto; border: 1px solid #ddd;">
+        </div>
+        <div style="flex: 1 1 280px; background-color: #fff; padding: 15px; text-align: center; border: 1px solid #ddd;">
+            <h3 style="color: #333; font-size: 20px; font-weight: bold; margin: 0 0 10px;">Career Analyzer</h3>
+            <img src="https://res.cloudinary.com/dgtyqhtor/image/upload/v1753290425/Screenshot_2025-07-23_223648_xv229a.png" alt="Email Generator" style="max-width: 100%; height: auto; border: 1px solid #ddd;">
+        </div>
+        <div style="flex: 1 1 280px; background-color: #fff; padding: 15px; text-align: center; border: 1px solid #ddd;">
+            <h3 style="color: #333; font-size: 20px; font-weight: bold; margin: 0 0 10px;">Resume Builder</h3>
+            <img src="https://res.cloudinary.com/dgtyqhtor/image/upload/v1753290885/Screenshot_2025-07-23_224324_zze1oh.png" alt="Email Generator" style="max-width: 100%; height: auto; border: 1px solid #ddd;">
+        </div>
+    </div>
+</div>
+
+<hr>
 

@@ -179,45 +179,47 @@ const Dashboard = () => {
           >
             <FiMenu />
           </button>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-300 to-gray-500 mb-8 text-center animate-fadeInUp">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-300 to-gray-500 mb-8 text-center animate-fadeInUp">
             Welcome, {user?.name}!
           </h2>
           <div className="space-y-12">
-            <div className="flex flex-col items-center space-y-6 animate-fadeInUp">
+            <div className="flex flex-col items-center space-y-6 bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10 shadow-lg animate-fadeInUp">
               {user?.image ? (
                 <img
                   src={user.image}
                   alt="Profile"
-                  className="w-32 h-32 sm:w-36 sm:h-36 rounded-full object-cover border-4 border-white/20 shadow-xl transition-transform duration-500 hover:scale-110 hover:shadow-gray-500/30"
+                  className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full object-cover border-4 border-white/20 shadow-xl transition-transform duration-500 hover:scale-110 hover:shadow-gray-500/30"
                   onError={(e) => {
                     console.error('Image failed to load:', user.image);
                     e.target.src = 'https://via.placeholder.com/96';
                   }}
                 />
               ) : (
-                <div className="w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-white/5 flex items-center justify-center border-4 border-white/20 shadow-xl">
-                  <span className="text-gray-400 text-sm font-medium">No Image</span>
+                <div className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full bg-white/5 flex items-center justify-center border-4 border-white/20 shadow-xl">
+                  <span className="text-gray-400 text-xs sm:text-sm font-medium">No Image</span>
                 </div>
               )}
-              <div className="text-white text-center">
-                <h3 className="text-xl sm:text-2xl font-bold md:text-3xl mb-5 text-gray-200">Profile Details</h3>
-                <p className="text-gray-300 text-sm sm:text-base"><strong>Name:</strong> {user?.name}</p>
-                <p className="text-gray-300 text-sm sm:text-base"><strong>Email:</strong> {user?.email}</p>
-                <p className="text-gray-300 text-sm sm:text-base"><strong>Mobile:</strong> {user?.mobile}</p>
-                <p className="text-gray-300 text-sm sm:text-base"><strong>Course:</strong> {user?.course}</p>
-                <p className="text-gray-300 text-sm sm:text-base"><strong>Year/Class:</strong> {user?.year}</p>
-                <p className="text-gray-300 text-sm sm:text-base"><strong>Roll Number:</strong> {user?.rollNumber}</p>
-                <p className="text-gray-300 text-sm sm:text-base">
-                  <strong>Address:</strong> {user?.address?.street}, {user?.address?.city},{' '}
-                  {user?.address?.state}, {user?.address?.pincode}
-                </p>
+              <div className="text-white text-center w-full">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-200 mb-4">Profile Details</h3>
+                <div className="grid grid-cols-1 gap-3 text-sm sm:text-base">
+                  <p className="text-gray-300"><strong>Name:</strong> {user?.name}</p>
+                  <p className="text-gray-300"><strong>Email:</strong> {user?.email}</p>
+                  <p className="text-gray-300"><strong>Mobile:</strong> {user?.mobile}</p>
+                  <p className="text-gray-300"><strong>Course:</strong> {user?.course}</p>
+                  <p className="text-gray-300"><strong>Year/Class:</strong> {user?.year}</p>
+                  <p className="text-gray-300"><strong>Roll Number:</strong> {user?.rollNumber}</p>
+                  <p className="text-gray-300">
+                    <strong>Address:</strong> {user?.address?.street}, {user?.address?.city},{' '}
+                    {user?.address?.state}, {user?.address?.pincode}
+                  </p>
+                </div>
               </div>
             </div>
 
             <div className="mt-12">
-              <h3 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-200 mb-8 animate-fadeInUp">Your Interview Prep Sessions</h3>
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-200 mb-8 animate-fadeInUp">Your Interview Prep Sessions</h3>
               {sessions.length === 0 ? (
-                <p className="text-gray-400 text-center text-lg sm:text-xl font-medium animate-fadeInUp">No sessions found. Create one in Interview Prep!</p>
+                <p className="text-gray-400 text-center text-base sm:text-lg font-medium animate-fadeInUp">No sessions found. Create one in Interview Prep!</p>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                   {sessions.map((session, index) => (
@@ -228,11 +230,11 @@ const Dashboard = () => {
                     >
                       <div className="absolute inset-0 bg-gradient-to-br from-gray-500/10 to-gray-300/10 rounded-2xl opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
                       <div className="relative">
-                        <h4 className="text-lg sm:text-xl font-bold text-white mb-4">{session.role}</h4>
-                        <p className="text-gray-300 text-sm">
+                        <h4 className="text-base sm:text-lg font-bold text-white mb-4">{session.role}</h4>
+                        <p className="text-gray-300 text-xs sm:text-sm">
                           <strong>Experience:</strong> {session.experience} Years
                         </p>
-                        <p className="text-gray-300 text-sm">
+                        <p className="text-gray-300 text-xs sm:text-sm">
                           <strong>Skills:</strong> {session.topicsToFocus}
                         </p>
                         <button
@@ -244,9 +246,9 @@ const Dashboard = () => {
                         </button>
                         {visibleQuestions[session._id] && (
                           <div className="mt-6 space-y-5 animate-slideDown">
-                            <h5 className="text-md sm:text-lg font-semibold text-gray-200">Questions</h5>
+                            <h5 className="text-sm sm:text-md font-semibold text-gray-200">Questions</h5>
                             {session.questions.length === 0 ? (
-                              <p className="text-gray-400 text-sm">No questions in this session.</p>
+                              <p className="text-gray-400 text-xs sm:text-sm">No questions in this session.</p>
                             ) : (
                               <div className="space-y-5">
                                 {session.questions.map((q) => (
@@ -254,8 +256,8 @@ const Dashboard = () => {
                                     key={q._id}
                                     className="bg-white/5 p-5 rounded-lg border border-white/10 transition-all duration-300 hover:border-gray-500/50 hover:shadow-md"
                                   >
-                                    <h6 className="text-gray-200 font-medium text-sm sm:text-base">{q.question}</h6>
-                                    <div className="text-gray-300 prose prose-invert max-w-none text-sm sm:text-base">
+                                    <h6 className="text-gray-200 font-medium text-xs sm:text-sm">{q.question}</h6>
+                                    <div className="text-gray-300 prose prose-invert max-w-none text-xs sm:text-sm">
                                       <ReactMarkdown remarkPlugins={[remarkGfm]}>{q.answer}</ReactMarkdown>
                                     </div>
                                   </div>
