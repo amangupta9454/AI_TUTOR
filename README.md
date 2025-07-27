@@ -112,6 +112,7 @@ AI_PROJECT/
 │       │   ├── PricingChart.jsx
 │       │   ├── Register.jsx
 │       │   ├── ResumeEmbed.jsx
+|       |   ├── Linkedin.jsx
 │       ├── services/
 │       │   ├── geminiService.js
 │       └── Styles/
@@ -240,6 +241,7 @@ The backend typically runs on http://localhost:5000 (configurable in server.js).
     <li>📬 AI-Powered Email Generator: Craft job outreach and follow-up emails using Gemini API</li>
      <li>📊 Market Insights: Gain valuable insights into job market trends and opportunities</li>
       <li>🤝 Interview Prep: Prepare effectively for interviews with AI-powered guidance</li>
+      <li>🤝 Linkedin Optemizer: Prepare your linkedin effectively for selecting with AI-powered guidance</li>
         </ul> 
         <hr> 
         <h2 id="enhancements">🚀 Future Enhancements</h2>

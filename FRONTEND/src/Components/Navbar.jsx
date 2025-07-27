@@ -47,6 +47,7 @@ const Navbar = () => {
     { name: 'Career Path', to: '/career' },
     { name: 'Resume Builder', to: '/resume' },
     { name: 'Career Analyzer', to: '/carreranalyzer' },
+    {name: 'LiinkedIn Optemizer', to: '/linkedin'},
     { name: 'Contact', to: '/contact' },
     ...(isAuthenticated ? [{ name: 'Dashboard', to: '/dashboard' }] : [{ name: 'Login', to: '/login' }]),
   ];

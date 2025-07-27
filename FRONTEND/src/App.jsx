@@ -11,6 +11,7 @@ import EmailGenerator from './Components/EmailGenerator'
 import ResumeEmbed from './Components/ResumeEmbed'
 import Footer from './Components/Footer'
 import JobOpportunitiesAnalyzer from './Components/JobOpportunitiesAnalyzer'
+import LinkedIn from './Components/LinkedIn'
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
           <Route path="/email" element={<EmailGenerator />} />
           <Route path="/resume" element={<ResumeEmbed />} />
         <Route path="/carreranalyzer" element={<JobOpportunitiesAnalyzer />} />
+          <Route path="/linkedin" element={<LinkedIn />} />
         
         </Routes>
         <Footer />

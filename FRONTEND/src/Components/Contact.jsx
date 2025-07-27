@@ -12,6 +12,7 @@ const Contact = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [focusedField, setFocusedField] = useState('');
+  const [formStatus, setFormStatus] = useState('');
 
   const handleInputChange = (e) => {
     setFormData({
@@ -23,12 +24,35 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate form submission
-    setTimeout(() => {
+    setFormStatus('');
+
+    try {
+      const response = await fetch('https://getform.io/f/bejlpxla', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams(formData).toString(),
+      });
+
+      if (response.ok) {
+        setFormStatus('success');
+        setFormData({
+          name: '',
+          email: '',
+          mobile: '',
+          gender: '',
+          message: ''
+        });
+      } else {
+        throw new Error('Failed to submit the form');
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      setFormStatus('error');
+    } finally {
       setIsSubmitting(false);
-      // Reset form or show success message
-    }, 2000);
+    }
   };
 
   return (
@@ -134,7 +158,19 @@ const Contact = () => {
                 <p className="text-gray-400">Fill out the form below and I'll get back to you soon</p>
               </div>
 
-              <form action="https://getform.io/f/bejlpxla" method="POST" onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Form Status Message */}
+                {formStatus === 'success' && (
+                  <div className="text-center p-4 bg-green-500/10 border border-green-500/20 rounded-xl text-green-400 animate-fadeInUp">
+                    Your message has been sent successfully!
+                  </div>
+                )}
+                {formStatus === 'error' && (
+                  <div className="text-center p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 animate-fadeInUp">
+                    Failed to send message. Please try again later.
+                  </div>
+                )}
+
                 {/* Name Input */}
                 <div className="group">
                   <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
