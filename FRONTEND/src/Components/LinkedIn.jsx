@@ -40,28 +40,26 @@ const LinkedIn = () => {
     setPostForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Enhanced Profile Optimization Prompt
+  // Enhanced Profile Optimization Prompt (Focused on Selected Section)
   const generateProfilePrompt = () => `
-    You are an expert LinkedIn profile strategist with deep knowledge of personal branding and career storytelling. Optimize the following LinkedIn profile content to create a highly engaging, professional, and impactful section that stands out to recruiters, hiring managers, and industry peers.
-    - Name: ${profileForm.name}
-    - Email: ${profileForm.email}
-    - Desired Role: ${profileForm.role}
-    - LinkedIn Section: ${profileForm.section}
-    - Existing Content: ${profileForm.existingContent || 'Not provided'}
-    Task:
-    - Craft a compelling, concise, and authentic narrative tailored to the specified LinkedIn section (e.g., header, about, experience, education, skills).
-    - Highlight the user's unique strengths, achievements, and passion for the desired role, incorporating industry-specific keywords and a professional yet approachable tone.
-    - For the header, create a punchy, memorable tagline (max 220 characters) that showcases expertise and value.
-    - For the about section, weave a story that connects the user's background, skills, and aspirations (max 2600 characters).
-    - For experience, focus on quantifiable achievements and impact in 2-3 sentences per role.
-    - For education or skills, emphasize relevance to the desired role with concise, impactful descriptions.
-    - If existing content is provided, enhance it while preserving its core message, improving clarity, and adding flair.
-    - Ensure the tone is confident, authentic, and aligned with LinkedIn's professional audience.
-    - Return the optimized content as a plain string, formatted for direct use in LinkedIn (no bullet points, use paragraphs or line breaks as appropriate).
-    - Do NOT wrap the response in code fences or JSON.
-  `;
+  You are an expert LinkedIn profile strategist specializing in personal branding and career storytelling. Optimize the content for the user-selected LinkedIn profile section to create a highly engaging, professional, and impactful result that aligns with the user's desired role and stands out to recruiters, hiring managers, and industry peers.
+  - Name: ${profileForm.name}
+  - Email: ${profileForm.email}
+  - Desired Role: ${profileForm.role}
+  - Selected LinkedIn Section: ${profileForm.section}
+  - Existing Content: ${profileForm.existingContent || 'Not provided'}
+  Task:
+  - Focus exclusively on optimizing the selected LinkedIn section (${profileForm.section}).
+  - Craft a concise, authentic, and compelling narrative tailored to the desired role, incorporating industry-specific keywords and a professional yet approachable tone.
+  - For the header section, create a punchy, memorable tagline (max 220 characters) that highlights expertise, unique value, and career focus.
+  - If existing content is provided, enhance it by preserving its core message, improving clarity, and adding professional flair without altering its intent.
+  - Ensure the tone is confident, authentic, and optimized for LinkedIn's professional audience.
+  - Return the optimized content as a plain string, formatted for direct use in the selected LinkedIn section (use paragraphs or line breaks as appropriate, no bullet points).
+  - Do NOT include recommendations for other LinkedIn sections or generic content.
+  - Do NOT wrap the response in code fences or JSON.
+`;
 
-  // Enhanced Post Generation Prompt
+  // Post Generation Prompt (Unchanged from Previous)
   const generatePostPrompt = () => `
     You are a world-class LinkedIn content creator specializing in crafting viral, engaging, and professional posts that resonate with a professional audience. Generate a LinkedIn post based on the following details.
     - Achievement: ${postForm.achievement || 'Not provided'}
@@ -135,15 +133,15 @@ const LinkedIn = () => {
     <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center pt-20 sm:pt-24 lg:pt-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Dot Pattern Background with Blink Animation */}
       <div className="absolute inset-0 pointer-events-none z-0">
-        <div className="w-full h-full bg-[radial-gradient(circle_at_center,#a5b4fc_2.5px,transparent_2.5px)] bg-[length:25px_25px] opacity-65 animate-blink"></div>
+        <div className="w-full h-full bg-[radial-gradient(circle_at_center,#a5b4fc_2.5px,transparent_2.5px)] bg-[length:25px_25px] opacity-70 animate-blink"></div>
       </div>
 
       {/* Custom CSS for Animations and Styling */}
       <style>
         {`
           @keyframes blink {
-            0%, 100% { opacity: 0.65; }
-            50% { opacity: 0.35; }
+            0%, 100% { opacity: 0.70; }
+            50% { opacity: 0.40; }
           }
           .animate-blink {
             animation: blink 3.5s infinite ease-in-out;
@@ -162,18 +160,18 @@ const LinkedIn = () => {
             border-radius: 1.5rem;
             background: linear-gradient(145deg, #818cf8, #c4b5fd, #e9d5ff);
             z-index: -1;
-            filter: blur(3px);
+            filter: blur(4px);
           }
           .input-glow {
             transition: all 0.3s ease;
           }
           .input-glow:focus {
             transform: scale(1.02);
-            box-shadow: 0 0 14px rgba(129, 140, 248, 0.6);
+            box-shadow: 0 0 16px rgba(129, 140, 248, 0.7);
           }
           .input-hover:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(129, 140, 248, 0.4);
+            box-shadow: 0 8px 20px rgba(129, 140, 248, 0.5);
           }
           .button-glow {
             position: relative;
@@ -187,7 +185,7 @@ const LinkedIn = () => {
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
             transition: 0.5s;
           }
           .button-glow:hover::after {
@@ -195,7 +193,7 @@ const LinkedIn = () => {
           }
           .button-glow:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 24px rgba(129, 140, 248, 0.5);
+            box-shadow: 0 10px 24px rgba(129, 140, 248, 0.6);
           }
           .section-enter {
             animation: fadeInUp 0.7s ease-out;
@@ -208,7 +206,7 @@ const LinkedIn = () => {
             transition: all 0.5s ease;
           }
           .result-glow:hover {
-            box-shadow: 0 0 20px rgba(129, 140, 248, 0.3);
+            box-shadow: 0 0 22px rgba(129, 140, 248, 0.4);
           }
         `}
       </style>

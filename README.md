@@ -185,6 +185,7 @@ AI_PROJECT/
 <tr><td>recharts</td><td>^3.1.0</td></tr>
 <tr><td>remark-gfm</td><td>^4.0.1</td></tr>
 <tr><td>tailwindcss</td><td>^4.1.11</td></tr>
+<tr><td>uuid</td><td>^11.1.0</td></tr>
 </table>
 
 
