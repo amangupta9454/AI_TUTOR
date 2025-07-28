@@ -26,9 +26,9 @@ const Login = () => {
 
     try {
       const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}api/auth/login`, data);
-      // console.log('Login response:', response.data);
+     
       localStorage.setItem('token', response.data.token);
-      // console.log('Token stored:', localStorage.getItem('token'));
+      
       setSuccess('Login successful! Redirecting...');
       setTimeout(() => {
         setIsSubmitting(false);

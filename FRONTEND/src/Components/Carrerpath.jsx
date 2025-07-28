@@ -475,8 +475,6 @@ const CareerPath = () => {
       const response = await result.response;
       const text = response.text();
 
-      // Log raw response for debugging
-      // console.log("Raw API response:", text);
 
       // Clean and extract JSON
       const cleanedText = text
@@ -493,7 +491,6 @@ const CareerPath = () => {
       }
 
       const jsonText = cleanedText.substring(jsonStart, jsonEnd);
-      // console.log("Extracted JSON text:", jsonText);
 
       const roadmapData = safeParseJson(jsonText);
       setRoadmap(roadmapData);

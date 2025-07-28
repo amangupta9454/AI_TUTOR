@@ -56,7 +56,6 @@ const ResumeEmbed = () => {
   }, [navigate, iframeLoaded]);
 
   const handleIframeLoad = () => {
-    // console.log('Iframe loaded successfully');
     setIframeLoaded(true);
   };
 

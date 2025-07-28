@@ -113,6 +113,7 @@ AI_PROJECT/
 │       │   ├── Register.jsx
 │       │   ├── ResumeEmbed.jsx
 |       |   ├── Linkedin.jsx
+|       |   ├── SkilllAnalyzer.jsx
 │       ├── services/
 │       │   ├── geminiService.js
 │       └── Styles/

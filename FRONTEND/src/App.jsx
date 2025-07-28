@@ -12,6 +12,7 @@ import ResumeEmbed from './Components/ResumeEmbed'
 import Footer from './Components/Footer'
 import JobOpportunitiesAnalyzer from './Components/JobOpportunitiesAnalyzer'
 import LinkedIn from './Components/LinkedIn'
+import SkillAnalyzer from './Components/SkillAnalyzer'
 
 const App = () => {
   return (
@@ -30,6 +31,7 @@ const App = () => {
           <Route path="/resume" element={<ResumeEmbed />} />
         <Route path="/carreranalyzer" element={<JobOpportunitiesAnalyzer />} />
           <Route path="/linkedin" element={<LinkedIn />} />
+          <Route path="/skillanalyzer" element={<SkillAnalyzer />} />
         
         </Routes>
         <Footer />

@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FiMenu, FiX } from 'react-icons/fi';
+import { FiMenu, FiX, FiChevronDown } from 'react-icons/fi';
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [careerToolsOpen, setCareerToolsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
   const navigate = useNavigate();
@@ -32,7 +33,16 @@ const Navbar = () => {
     };
   }, []);
 
-  const toggleMenu = () => setMenuOpen(!menuOpen);
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+    if (menuOpen) {
+      setCareerToolsOpen(false);
+    }
+  };
+
+  const toggleCareerTools = () => {
+    setCareerToolsOpen(!careerToolsOpen);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -44,10 +54,16 @@ const Navbar = () => {
 
   const navLinks = [
     { name: 'Home', to: '/' },
-    { name: 'Career Path', to: '/career' },
-    { name: 'Resume Builder', to: '/resume' },
-    { name: 'Career Analyzer', to: '/carreranalyzer' },
-    {name: 'LiinkedIn Optemizer', to: '/linkedin'},
+    {
+      name: 'Career Tools',
+      subLinks: [
+        { name: 'Career Path', to: '/career' },
+        { name: 'Resume Builder', to: '/resume' },
+        { name: 'Career Analyzer', to: '/carreranalyzer' },
+        { name: 'LinkedIn Optimizer', to: '/linkedin' },
+        { name: 'Skill Analyzer', to: '/skillanalyzer' },
+      ],
+    },
     { name: 'Contact', to: '/contact' },
     ...(isAuthenticated ? [{ name: 'Dashboard', to: '/dashboard' }] : [{ name: 'Login', to: '/login' }]),
   ];
@@ -68,16 +84,41 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Links */}
-          <div className="hidden md:flex space-x-10">
+          <div className="hidden md:flex space-x-10 items-center">
             {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.to}
-                className="relative text-gray-300 hover:text-white font-medium group transition duration-300 ease-in-out"
-              >
-                {link.name}
-                <span className="absolute left-0 -bottom-1 h-0.5 w-0 bg-gradient-to-r from-fuchsia-500 via-blue-500 to-cyan-400 transition-all duration-300 group-hover:w-full rounded-full"></span>
-              </Link>
+              <div key={link.name} className="relative group">
+                {link.subLinks ? (
+                  <div className="relative">
+                    <div
+                      className="flex items-center text-gray-300 hover:text-white font-medium transition duration-300 ease-in-out cursor-pointer"
+                    >
+                      {link.name}
+                      <FiChevronDown className="ml-1" />
+                    </div>
+                    <div
+                      className="absolute left-0 mt-2 w-48 bg-[#0f172a]/95 backdrop-blur-md border border-gray-700 rounded-md shadow-lg opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transform -translate-y-2 transition-all duration-300 ease-in-out z-10"
+                    >
+                      {link.subLinks.map((subLink) => (
+                        <Link
+                          key={subLink.name}
+                          to={subLink.to}
+                          className="block px-4 py-2 text-gray-200 hover:text-white hover:bg-gray-700/50 rounded-md transition duration-200"
+                        >
+                          {subLink.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <Link
+                    to={link.to}
+                    className="relative text-gray-300 hover:text-white font-medium group transition duration-300 ease-in-out"
+                  >
+                    {link.name}
+                    <span className="absolute left-0 -bottom-1 h-0.5 w-0 bg-gradient-to-r from-fuchsia-500 via-blue-500 to-cyan-400 transition-all duration-300 group-hover:w-full rounded-full"></span>
+                  </Link>
+                )}
+              </div>
             ))}
             {isAuthenticated && (
               <button
@@ -104,14 +145,47 @@ const Navbar = () => {
         {menuOpen && (
           <div className="md:hidden bg-[#0f172a]/90 backdrop-blur-md border-t border-gray-700 px-6 py-4 space-y-3 animate-slide-down">
             {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.to}
-                onClick={() => setMenuOpen(false)}
-                className="block text-gray-200 hover:text-white text-lg font-medium tracking-wide transition-all duration-200"
-              >
-                {link.name}
-              </Link>
+              <div key={link.name}>
+                {link.subLinks ? (
+                  <div>
+                    <button
+                      onClick={toggleCareerTools}
+                      className="flex items-center justify-between w-full text-gray-200 hover:text-white text-lg font-medium tracking-wide transition-all duration-200"
+                    >
+                      {link.name}
+                      <FiChevronDown 
+                        className={`transition-transform duration-300 ${
+                          careerToolsOpen ? 'rotate-180' : 'rotate-0'
+                        }`} 
+                      />
+                    </button>
+                    <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                      careerToolsOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                    }`}>
+                      <div className="pt-2 space-y-2">
+                        {link.subLinks.map((subLink) => (
+                          <Link
+                            key={subLink.name}
+                            to={subLink.to}
+                            onClick={() => setMenuOpen(false)}
+                            className="block pl-4 py-1 text-gray-300 hover:text-white text-base font-medium tracking-wide transition-all duration-200 hover:bg-gray-700/30 rounded-md"
+                          >
+                            {subLink.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <Link
+                    to={link.to}
+                    onClick={() => setMenuOpen(false)}
+                    className="block text-gray-200 hover:text-white text-lg font-medium tracking-wide transition-all duration-200"
+                  >
+                    {link.name}
+                  </Link>
+                )}
+              </div>
             ))}
             {isAuthenticated && (
               <button

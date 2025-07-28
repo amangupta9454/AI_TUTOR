@@ -71,8 +71,6 @@ const EmailGenerator = () => {
 
     try {
       const token = localStorage.getItem('token');
-      // console.log('Sending request with token:', token);
-      // console.log('Request payload:', data);
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}api/emails/generate`,
         {
@@ -93,8 +91,6 @@ const EmailGenerator = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      // console.log('Full API Response:', response);
-      // console.log('Response Data:', response.data);
       const { email: emailContent, subject } = response.data;
       if (!emailContent || typeof emailContent !== 'string') {
         console.warn('Invalid email content received:', emailContent);
@@ -105,7 +101,6 @@ const EmailGenerator = () => {
         setGeneratedSubject(subject || `Application for ${data.jobRole} at ${data.companyName}`);
         setSuccess('Email generated successfully!');
       }
-      // console.log('Generated Email:', emailContent);
       setIsSubmitting(false);
       reset();
       await fetchEmailHistory(false);
@@ -370,7 +365,6 @@ const EmailGenerator = () => {
                 <span className="text-lg font-semibold text-gray-100 bg-gray-700/70 px-4 py-2 rounded-md shadow-sm">Subject: {generatedSubject}</span>
               </div>
             )}
-            {/* {console.log('Rendering Generated Email:', generatedEmail)} */}
             <div className="text-gray-100 prose prose-invert max-w-full break-words bg-gray-800/70 p-5 rounded-lg shadow-inner border border-gray-600/50">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{generatedEmail}</ReactMarkdown>
             </div>
