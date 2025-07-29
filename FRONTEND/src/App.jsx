@@ -13,6 +13,7 @@ import Footer from './Components/Footer'
 import JobOpportunitiesAnalyzer from './Components/JobOpportunitiesAnalyzer'
 import LinkedIn from './Components/LinkedIn'
 import SkillAnalyzer from './Components/SkillAnalyzer'
+import About from './Components/About'
 
 const App = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
         <Route path="/carreranalyzer" element={<JobOpportunitiesAnalyzer />} />
           <Route path="/linkedin" element={<LinkedIn />} />
           <Route path="/skillanalyzer" element={<SkillAnalyzer />} />
+          <Route path="/about" element={<About />} />
         
         </Routes>
         <Footer />

@@ -4,9 +4,10 @@ import { FiMenu, FiX, FiChevronDown } from 'react-icons/fi';
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [careerToolsOpen, setCareerToolsOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
+  const [hoveredLink, setHoveredLink] = useState(null);
   const navigate = useNavigate();
 
   // Monitor authentication status changes
@@ -36,12 +37,12 @@ const Navbar = () => {
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
     if (menuOpen) {
-      setCareerToolsOpen(false);
+      setOpenDropdown(null);
     }
   };
 
-  const toggleCareerTools = () => {
-    setCareerToolsOpen(!careerToolsOpen);
+  const toggleDropdown = (linkName) => {
+    setOpenDropdown(openDropdown === linkName ? null : linkName);
   };
 
   const handleLogout = () => {
@@ -52,8 +53,24 @@ const Navbar = () => {
     window.dispatchEvent(new Event('storage')); // Trigger storage event
   };
 
+  const handleMouseEnter = (linkName) => {
+    setHoveredLink(linkName);
+  };
+
+  const handleMouseLeave = () => {
+    // Add a small delay before hiding to prevent flickering
+    setTimeout(() => {
+      setHoveredLink(null);
+    }, 100);
+  };
+
   const navLinks = [
-    { name: 'Home', to: '/' },
+    { name: 'Home', to: '/',
+      subLinks: [
+        {name: 'Home', to: '/'},
+        { name: 'About Us', to: '/about' },
+      ],
+     },
     {
       name: 'Career Tools',
       subLinks: [
@@ -86,23 +103,31 @@ const Navbar = () => {
           {/* Desktop Links */}
           <div className="hidden md:flex space-x-10 items-center">
             {navLinks.map((link) => (
-              <div key={link.name} className="relative group">
+              <div key={link.name} className="relative">
                 {link.subLinks ? (
-                  <div className="relative">
-                    <div
-                      className="flex items-center text-gray-300 hover:text-white font-medium transition duration-300 ease-in-out cursor-pointer"
-                    >
+                  <div 
+                    className="relative py-2"
+                    onMouseEnter={() => handleMouseEnter(link.name)}
+                    onMouseLeave={handleMouseLeave}
+                  >
+                    <div className="flex items-center text-gray-300 hover:text-white font-medium transition duration-300 ease-in-out cursor-pointer px-2">
                       {link.name}
                       <FiChevronDown className="ml-1" />
                     </div>
                     <div
-                      className="absolute left-0 mt-2 w-48 bg-[#0f172a]/95 backdrop-blur-md border border-gray-700 rounded-md shadow-lg opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transform -translate-y-2 transition-all duration-300 ease-in-out z-10"
+                      className={`absolute left-0 top-full w-48 bg-[#0f172a]/95 backdrop-blur-md border border-gray-700 rounded-md shadow-lg transition-all duration-200 ease-in-out z-10 ${
+                        hoveredLink === link.name 
+                          ? 'opacity-100 translate-y-0 pointer-events-auto' 
+                          : 'opacity-0 -translate-y-2 pointer-events-none'
+                      }`}
+                      style={{ marginTop: '0px' }}
                     >
                       {link.subLinks.map((subLink) => (
                         <Link
                           key={subLink.name}
                           to={subLink.to}
-                          className="block px-4 py-2 text-gray-200 hover:text-white hover:bg-gray-700/50 rounded-md transition duration-200"
+                          className="block px-4 py-3 text-gray-200 hover:text-white hover:bg-gray-700/50 transition duration-200 first:rounded-t-md last:rounded-b-md"
+                          onClick={() => setHoveredLink(null)}
                         >
                           {subLink.name}
                         </Link>
@@ -112,10 +137,10 @@ const Navbar = () => {
                 ) : (
                   <Link
                     to={link.to}
-                    className="relative text-gray-300 hover:text-white font-medium group transition duration-300 ease-in-out"
+                    className="relative text-gray-300 hover:text-white font-medium group transition duration-300 ease-in-out px-2 py-2"
                   >
                     {link.name}
-                    <span className="absolute left-0 -bottom-1 h-0.5 w-0 bg-gradient-to-r from-fuchsia-500 via-blue-500 to-cyan-400 transition-all duration-300 group-hover:w-full rounded-full"></span>
+                    <span className="absolute left-2 -bottom-1 h-0.5 w-0 bg-gradient-to-r from-fuchsia-500 via-blue-500 to-cyan-400 transition-all duration-300 group-hover:w-[calc(100%-16px)] rounded-full"></span>
                   </Link>
                 )}
               </div>
@@ -123,7 +148,7 @@ const Navbar = () => {
             {isAuthenticated && (
               <button
                 onClick={handleLogout}
-                className="text-gray-300 hover:text-white font-medium transition duration-300 ease-in-out"
+                className="text-gray-300 hover:text-white font-medium transition duration-300 ease-in-out px-2 py-2"
               >
                 Logout
               </button>
@@ -149,18 +174,18 @@ const Navbar = () => {
                 {link.subLinks ? (
                   <div>
                     <button
-                      onClick={toggleCareerTools}
+                      onClick={() => toggleDropdown(link.name)}
                       className="flex items-center justify-between w-full text-gray-200 hover:text-white text-lg font-medium tracking-wide transition-all duration-200"
                     >
                       {link.name}
                       <FiChevronDown 
                         className={`transition-transform duration-300 ${
-                          careerToolsOpen ? 'rotate-180' : 'rotate-0'
+                          openDropdown === link.name ? 'rotate-180' : 'rotate-0'
                         }`} 
                       />
                     </button>
                     <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                      careerToolsOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                      openDropdown === link.name ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                     }`}>
                       <div className="pt-2 space-y-2">
                         {link.subLinks.map((subLink) => (

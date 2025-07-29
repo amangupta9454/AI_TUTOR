@@ -102,6 +102,7 @@ AI_PROJECT/
 │       │   ├── EmailGenerator.jsx
 │       │   ├── Footer.jsx
 │       │   ├── Home.jsx
+│       │   ├── About.jsx
 │       │   ├── InterviewPrep.jsx
 │       │   ├── JobOpportunitiesAnalyzer.jsx
 │       │   ├── Navbar.jsx
@@ -187,6 +188,10 @@ AI_PROJECT/
 <tr><td>remark-gfm</td><td>^4.0.1</td></tr>
 <tr><td>tailwindcss</td><td>^4.1.11</td></tr>
 <tr><td>uuid</td><td>^11.1.0</td></tr>
+<tr><td>gsap</td><td>^3.13.0</td></tr>
+<tr><td>@mui/material</td><td>^7.2.0</td></tr>
+<tr><td>@emotion/react</td><td>^11.14.0</td></tr>
+<tr><td>@emotion/styled</td><td>^11.14.1</td></tr>
 </table>
 
 
