@@ -78,7 +78,7 @@ const Navbar = () => {
         { name: 'Resume Builder', to: '/resume' },
         { name: 'Career Analyzer', to: '/carreranalyzer' },
         { name: 'LinkedIn Optimizer', to: '/linkedin' },
-        { name: 'Skill Analyzer', to: '/skillanalyzer' },
+        { name: 'Market Insights', to: '/skillanalyzer' },
       ],
     },
     { name: 'Contact', to: '/contact' },

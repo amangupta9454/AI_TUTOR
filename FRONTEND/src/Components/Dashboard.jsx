@@ -69,9 +69,7 @@ const Dashboard = () => {
   const sidebarLinks = [
     { name: 'Interview Prep', to: '/interview-prep' },
     { name: 'Email Generator', to: '/email' },
-    { name: 'Career Path', to: '/career' },
     { name: 'Resume Builder', to: '/resume' },
-    { name: 'Career Analyzer', to: '/carreranalyzer' },
   ];
 
   if (loading) {
