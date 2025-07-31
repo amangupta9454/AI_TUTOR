@@ -76,9 +76,9 @@ const Navbar = () => {
       subLinks: [
         { name: 'Career Path', to: '/career' },
         { name: 'Resume Builder', to: '/resume' },
-        { name: 'Career Analyzer', to: '/carreranalyzer' },
+        { name: 'Market Insights', to: '/carreranalyzer' },
         { name: 'LinkedIn Optimizer', to: '/linkedin' },
-        { name: 'Market Insights', to: '/skillanalyzer' },
+        { name: 'Skill Gap Amalyzer', to: '/skillanalyzer' },
       ],
     },
     { name: 'Contact', to: '/contact' },
